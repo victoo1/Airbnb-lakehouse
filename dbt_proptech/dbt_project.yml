@@ -1,0 +1,15 @@
+name: 'dbt_proptech'
+version: '1.0.0'
+config-version: 2
+
+profile: 'dbt_proptech'
+
+model-paths: ["models"]
+target-path: "target"
+
+models:
+  dbt_proptech:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  proptech_pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: proptech_pipeline_app
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_S3_BUCKET=greystar-rental-lake
+    volumes:
+      - .:/app
+    ports:
+      - "8080:8080"
+    command: tail -f /dev/null
