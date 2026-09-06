@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: bronze_raw
+    database: GREYSTAR_PROPTECH_DB
+    schema: BRONZE_RAW
+    tables:
+      - name: RAW_LISTINGS
+      - name: RAW_CALENDAR

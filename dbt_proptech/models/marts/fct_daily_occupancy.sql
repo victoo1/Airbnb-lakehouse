@@ -1,21 +1,17 @@
-{{ config(
-    materialized='incremental',
-    unique_key=['listing_id', 'metric_date']
-) }}
+{{ config(materialized='incremental', unique_key=['listing_id', 'calendar_date']) }}
 
-WITH calendar AS (
+WITH stg_calendar AS (
     SELECT * FROM {{ ref('stg_calendar') }}
 )
 
 SELECT
     listing_id,
-    calendar_date AS metric_date,
+    calendar_date,
+    is_booked,
     daily_price,
-    CASE WHEN is_booked THEN 1 ELSE 0 END AS occupied_count,
-    CASE WHEN is_booked THEN daily_price ELSE 0 END AS realized_revenue,
-    CURRENT_TIMESTAMP() AS dbt_updated_at
-FROM calendar
+    CURRENT_TIMESTAMP() AS updated_at
+FROM stg_calendar
 
 {% if is_incremental() %}
-  WHERE calendar_date >= (SELECT MAX(metric_date) FROM {{ this }})
+    WHERE calendar_date >= (SELECT MAX(calendar_date) FROM {{ this }})
 {% endif %}

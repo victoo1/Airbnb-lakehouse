@@ -2,11 +2,11 @@
 
 WITH raw_calendar AS (
     SELECT 
-        $1:listing_id::BIGINT AS listing_id,
-        $1:date::DATE AS calendar_date,
-        $1:available::STRING AS available_flag,
-        $1:price::FLOAT AS listing_price
-    FROM @GREYSTAR_PROPTECH_DB.PUBLIC.S3_RAW_STAGE/calendar/
+        listing_id,
+        calendar_date,
+        available_flag,
+        listing_price
+    FROM {{ source('bronze_raw', 'RAW_CALENDAR') }}
 )
 
 SELECT

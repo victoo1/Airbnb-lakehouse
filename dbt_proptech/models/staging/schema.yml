@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_calendar
+    description: "Cleaning and transforming raw calendar booking data"
+    columns:
+      - name: listing_id
+        tests:
+          - not_null
+      - name: calendar_date
+        tests:
+          - not_null
+
+  - name: stg_listings
+    description: "Cleaning and parsing raw listing details"
+    columns:
+      - name: listing_id
+        tests:
+          - unique
+          - not_null
