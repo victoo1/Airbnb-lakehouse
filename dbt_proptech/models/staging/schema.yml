@@ -1,20 +1,23 @@
 version: 2
 
 models:
-  - name: stg_calendar
-    description: "Cleaning and transforming raw calendar booking data"
+  - name: stg_listings
+    description: "Staged listing properties from Airbnb raw dataset"
     columns:
       - name: listing_id
+        description: "Primary key for listings"
+        tests:
+          - unique
+          - not_null
+
+  - name: stg_calendar
+    description: "Staged daily reservation calendar status"
+    columns:
+      - name: listing_id
+        description: "Foreign key referencing stg_listings"
         tests:
           - not_null
       - name: calendar_date
+        description: "Date of occupancy/listing status"
         tests:
-          - not_null
-
-  - name: stg_listings
-    description: "Cleaning and parsing raw listing details"
-    columns:
-      - name: listing_id
-        tests:
-          - unique
           - not_null

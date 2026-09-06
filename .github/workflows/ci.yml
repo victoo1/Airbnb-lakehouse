@@ -1,15 +1,15 @@
-name: Data Pipeline CI
+name: Data Pipeline CI & Docs Deploy
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  ci-validation:
-    name: Validate dbt Models & Airflow DAGs
+  ci-and-docs:
+    name: Validate dbt & Publish Docs
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout Repository
@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install CI Dependencies
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install dbt-core dbt-snowflake apache-airflow
@@ -29,7 +29,18 @@ jobs:
         run: |
           python -c "import glob, py_compile; [py_compile.compile(f, doraise=True) for f in glob.glob('dags/*.py')]"
 
-      - name: Test dbt Parsing & Syntax
+      - name: Test dbt Syntax
         run: |
           cd dbt_proptech
           dbt parse --profiles-dir . || true
+
+      - name: Generate dbt Docs
+        run: |
+          cd dbt_proptech
+          dbt docs generate --profiles-dir . || true
+
+      - name: Deploy dbt Docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dbt_proptech/target

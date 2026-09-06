@@ -25,4 +25,7 @@ dbt_proptech/logs/
 airflow.cfg
 
 .DS_Store
-.vscode/
+.vscode/profiles.yml
+dbt_proptech/.user.yml
+dbt_proptech/logs/
+dbt_proptech/target/
